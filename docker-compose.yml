@@ -1,0 +1,33 @@
+version: '3'
+services:
+    zoo-app:
+        build: .
+        container_name: zoo-app
+        ports:
+            - "80:80"
+        volumes:
+            - ./pages:/usr/share/nginx/html
+            - ./assets:/usr/share/nginx/html/assets
+            - ./js:/usr/share/nginx/html/js
+            - ./styles:/usr/share/nginx/html/styles
+            - ./icons:/usr/share/nginx/html/icons
+        networks:
+            - jenkins-zoo-network
+
+    jenkins:
+        image: jenkins/jenkins:lts
+        container_name: jenkins-container
+        ports:
+            - "8080:8080"
+        networks:
+            - jenkins-zoo-network
+        volumes:
+            - jenkins_home:/var/jenkins_home
+
+networks:
+    jenkins-zoo-network:
+        driver: bridge
+
+volumes:
+    jenkins_home:
+        driver: local
